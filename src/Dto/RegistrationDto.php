@@ -24,6 +24,7 @@ class RegistrationDto
     protected int $timeLimit = 0;
     protected bool $waitForResult = false;
     protected string $sign;
+    protected string $encoding = 'UTF-8';
 
     public function getMerchantId(): int
     {
@@ -242,6 +243,17 @@ class RegistrationDto
     public function setSign(string $sign): RegistrationDto
     {
         $this->sign = $sign;
+        return $this;
+    }
+
+    public function getEncoding(): string
+    {
+        return $this->encoding;
+    }
+
+    public function setEncoding(string $encoding): RegistrationDto
+    {
+        $this->encoding = $encoding;
         return $this;
     }
 

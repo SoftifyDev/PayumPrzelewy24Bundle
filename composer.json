@@ -1,0 +1,22 @@
+{
+  "name": "softify/payum-przelewy24-bundle",
+  "description": "Przelewy24 payments bundle for Symfony based on Payum",
+  "license": "MIT",
+  "type": "symfony-bundle",
+  "authors": [
+    {
+      "name": "Krystian Liński",
+      "email": "krystian.linski@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Softify\\PayumPrzelewy24Bundle\\": "src/"
+    }
+  },
+  "require": {
+    "sensio/framework-extra-bundle": "^5.1",
+    "payum/payum-bundle": "^2.0",
+    "php-http/guzzle6-adapter": "^2.0"
+  }
+}

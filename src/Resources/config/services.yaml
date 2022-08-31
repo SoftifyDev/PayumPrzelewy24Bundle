@@ -1,0 +1,39 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Softify\PayumPrzelewy24Bundle\:
+        resource: '../../../src/*'
+        exclude: '../../../src/{Entity,Migrations,Tests,Kernel.php}'
+
+    softify.payment.przelewy24.gateway_factory:
+        class: Payum\Core\Bridge\Symfony\Builder\GatewayFactoryBuilder
+        arguments: [ 'Softify\PayumPrzelewy24Bundle\Factory\Przelewy24GatewayFactory' ]
+        tags:
+            - { name: payum.gateway_factory_builder, factory: przelewy24 }
+
+    softify.payment.przelewy24.action.capture:
+        class: Softify\PayumPrzelewy24Bundle\Action\CaptureAction
+        public: true
+        tags:
+            - { name: payum.action, factory: przelewy24, alias: payum.action.capture }
+
+    softify.payment.przelewy24.action.notify:
+        class: Softify\PayumPrzelewy24Bundle\Action\NotifyAction
+        public: true
+        tags:
+            - { name: payum.action, factory: przelewy24, alias: payum.action.notify }
+
+    softify.payment.przelewy24.action.status:
+        class: Softify\PayumPrzelewy24Bundle\Action\StatusAction
+        public: true
+        tags:
+            - { name: payum.action, factory: przelewy24, alias: payum.action.status }
+
+    softify.payment.przelewy24.action.convert_payment:
+        class: Softify\PayumPrzelewy24Bundle\Action\ConvertPaymentAction
+        public: true
+        tags:
+            - { name: payum.action, factory: przelewy24, alias: payum.action.convert_payment }

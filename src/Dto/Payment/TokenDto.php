@@ -1,6 +1,6 @@
 <?php
 
-namespace Softify\PayumPrzelewy24Bundle\Dto;
+namespace Softify\PayumPrzelewy24Bundle\Dto\Payment;
 
 class TokenDto
 {

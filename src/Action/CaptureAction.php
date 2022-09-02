@@ -16,7 +16,7 @@ use Payum\Core\Security\TokenInterface;
 use Payum\Core\Reply\HttpRedirect;
 use Softify\PayumPrzelewy24Bundle\Api\ApiInterface;
 use Softify\PayumPrzelewy24Bundle\Dto\ErrorResponseDto;
-use Softify\PayumPrzelewy24Bundle\Dto\TransactionResponseDto;
+use Softify\PayumPrzelewy24Bundle\Dto\Payment\TransactionResponseDto;
 use Softify\PayumPrzelewy24Bundle\Exception\PaymentException;
 use Softify\PayumPrzelewy24Bundle\Service\PaymentService;
 
@@ -35,8 +35,10 @@ final class CaptureAction implements ApiAwareInterface, ActionInterface, Gateway
 
     public function execute($request): void
     {
+        /** @var Capture $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
+        $this->setMerchantIdFromPayment($request);
         /** @var ArrayObject $model */
         $model = $request->getModel();
         if ($model['urlPayment'] === null || ($model['urlPayment'] && $model['state'] === ApiInterface::CREATED_STATUS)) {
@@ -44,7 +46,7 @@ final class CaptureAction implements ApiAwareInterface, ActionInterface, Gateway
             $token = $request->getToken();
 
             if ($model['urlPayment'] === null) {
-                $notifyToken = $this->createNotifyToken($token);
+                $notifyToken = $this->createNotifyToken($token->getGatewayName(), $request->getFirstModel());
                 $model['urlStatus'] = $notifyToken->getTargetUrl();
                 $request->setModel($model);
 
@@ -67,9 +69,9 @@ final class CaptureAction implements ApiAwareInterface, ActionInterface, Gateway
         }
     }
 
-    protected function createNotifyToken(TokenInterface $token): TokenInterface
+    protected function createNotifyToken(string $gatewayName, object $model): TokenInterface
     {
-        return $this->tokenFactory->createNotifyToken($token->getGatewayName(), $token->getDetails());
+        return $this->tokenFactory->createNotifyToken($gatewayName, $model);
     }
 
     public function supports($request): bool

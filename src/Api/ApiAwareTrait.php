@@ -3,6 +3,8 @@
 namespace Softify\PayumPrzelewy24Bundle\Api;
 
 use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Core\Request\Generic;
+use Softify\PayumPrzelewy24Bundle\Entity\Payment;
 
 trait ApiAwareTrait {
 
@@ -17,5 +19,12 @@ trait ApiAwareTrait {
         }
 
         throw new UnsupportedApiException();
+    }
+
+    protected function setMerchantIdFromPayment(Generic $request): void
+    {
+        /** @var Payment $payment */
+        $payment = $request->getFirstModel();
+        $this->api->setClientId($payment->getMerchantId());
     }
 }

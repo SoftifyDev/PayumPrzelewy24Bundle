@@ -1,8 +1,6 @@
 <?php
 
-namespace Softify\PayumPrzelewy24Bundle\Dto;
-
-use Symfony\Component\VarDumper\VarDumper;
+namespace Softify\PayumPrzelewy24Bundle\Dto\Payment;
 
 class NotificationDto
 {

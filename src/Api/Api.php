@@ -4,35 +4,58 @@ namespace Softify\PayumPrzelewy24Bundle\Api;
 
 class Api implements ApiInterface
 {
-    private int $clientId;
-    private string $clientSecret;
-    private string $apiKey;
+    private ?int $clientId;
+    private ?string $clientSecret;
+    private ?string $apiKey;
     private bool $sandbox;
+    private bool $marketplace;
+    private ?string $marketplaceApiKey;
+    private ?int $marketplaceClientId;
+    private ?string $marketplaceApiUri;
 
     /**
      * @param array $parameters
      */
     public function __construct(array $parameters = [])
     {
-        $this->clientId = (int)$parameters['clientId'];
+        $this->clientId = $parameters['clientId'];
         $this->clientSecret = $parameters['clientSecret'];
         $this->apiKey = $parameters['apiKey'];
         $this->sandbox = (bool)$parameters['sandbox'];
+        $this->marketplace = (bool)$parameters['marketplace'];
+        $this->marketplaceApiKey = $parameters['marketplaceApiKey'];
+        $this->marketplaceClientId = $parameters['marketplaceClientId'];
+        $this->marketplaceApiUri = $parameters['marketplaceApiUri'];
     }
 
-    public function getClientId(): int
+    public function getClientId(): ?int
     {
         return $this->clientId;
     }
 
-    public function getClientSecret(): string
+    public function setClientId(?int $clientId): void
+    {
+        $this->clientId = $clientId;
+    }
+
+    public function getClientSecret(): ?string
     {
         return $this->clientSecret;
     }
 
-    public function getApiKey(): string
+    public function setClientSecret(?string $clientSecret): void
+    {
+        $this->clientSecret = $clientSecret;
+    }
+
+    public function getApiKey(): ?string
     {
         return $this->apiKey;
+    }
+
+    public function setApiKey(?string $apiKey): void
+    {
+        $this->apiKey = $apiKey;
     }
 
     public function getUrl(): string
@@ -48,5 +71,28 @@ class Api implements ApiInterface
     public function getAuthData(): array
     {
         return [$this->clientId, $this->apiKey];
+    }
+
+    public function isMarketplace(): bool
+    {
+        return $this->marketplace;
+    }
+
+    public function getMarketplaceApiKey(): ?string
+    {
+        return $this->marketplaceApiKey;
+    }
+
+    public function getMarketplaceClientId(): ?int
+    {
+        return $this->marketplaceClientId;
+    }
+
+    public function getMarketplaceApiUri(): ?string
+    {
+        if ($this->marketplace) {
+            return $this->marketplaceApiUri ?? self::API_URL_PRODUCTION;
+        }
+        return null;
     }
 }

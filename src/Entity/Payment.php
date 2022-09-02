@@ -22,6 +22,11 @@ abstract class Payment extends BasePayment
      */
     protected string $status;
 
+    /**
+     * @ORM\Column(name="merchant_id", type="string", nullable=true)
+     */
+    protected ?int $merchantId = null;
+
     public function getStatus(): string
     {
         return $this->status;
@@ -41,6 +46,17 @@ abstract class Payment extends BasePayment
     public function setId(int $id): self
     {
         $this->id = $id;
+        return $this;
+    }
+
+    public function getMerchantId(): ?int
+    {
+        return $this->merchantId;
+    }
+
+    public function setMerchantId(?int $merchantId): Payment
+    {
+        $this->merchantId = $merchantId;
         return $this;
     }
 }

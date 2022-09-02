@@ -31,8 +31,15 @@ interface ApiInterface
 
     public function getUrl(): string;
     public function getApiUrl(): string;
-    public function getClientId(): int;
-    public function getClientSecret(): string;
-    public function getApiKey(): string;
+    public function getClientId(): ?int;
+    public function setClientId(?int $clientId): void;
+    public function getClientSecret(): ?string;
+    public function setClientSecret(?string $clientSecret): void;
+    public function getApiKey(): ?string;
+    public function setApiKey(?string $apiKey): void;
     public function getAuthData(): array;
+    public function isMarketplace(): bool;
+    public function getMarketplaceApiKey(): ?string;
+    public function getMarketplaceClientId(): ?int;
+    public function getMarketplaceApiUri(): ?string;
 }

@@ -15,7 +15,9 @@ use Payum\Core\Request\Notify;
 use Softify\PayumPrzelewy24Bundle\Api\ApiAwareTrait;
 use Softify\PayumPrzelewy24Bundle\Api\ApiInterface;
 use Softify\PayumPrzelewy24Bundle\Dto\ErrorResponseDto;
-use Softify\PayumPrzelewy24Bundle\Dto\VerificationResponseDto;
+use Softify\PayumPrzelewy24Bundle\Dto\Marketplace\CrcResponseDto;
+use Softify\PayumPrzelewy24Bundle\Dto\Payment\NotificationDto;
+use Softify\PayumPrzelewy24Bundle\Dto\Payment\VerificationResponseDto;
 use Softify\PayumPrzelewy24Bundle\Entity\Payment;
 use Softify\PayumPrzelewy24Bundle\Service\PaymentService;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -41,11 +43,13 @@ final class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayA
 
     public function execute($request): void
     {
+        /** @var Notify $request */
         RequestNotSupportedException::assertSupports($this, $request);
+
+        $this->setMerchantIdFromPayment($request);
+
         $notificationDto = $this->paymentService->deserializeNotification($this->getHttpRequest()->content);
-        if (!$notificationDto->verify($this->api->getClientSecret())) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        $this->verifyRequest($request, $notificationDto);
 
         /** @var Notify $request */
         $model = $request->getModel();
@@ -83,5 +87,14 @@ final class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayA
     {
         $this->gateway->execute($httpRequest = new GetHttpRequest());
         return $httpRequest;
+    }
+
+    private function verifyRequest(Notify $request, NotificationDto $notificationDto): void
+    {
+        $crcResponse = $this->paymentService->getMarketplaceService()->getCRCKey($this->api->getClientId());
+        if ($crcResponse instanceof CrcResponseDto && $notificationDto->verify($crcResponse->getData()->getCrc())) {
+            return;
+        }
+        throw RequestNotSupportedException::createActionNotSupported($this, $request);
     }
 }

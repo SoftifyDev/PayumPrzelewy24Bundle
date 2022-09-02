@@ -1,8 +1,10 @@
 <?php
 
-namespace Softify\PayumPrzelewy24Bundle\Dto;
+namespace Softify\PayumPrzelewy24Bundle\Dto\Payment;
 
-class VerificationResponseDto extends AbstractResponseDto implements ResponseDtoInterface
+use Softify\PayumPrzelewy24Bundle\Dto\ApiResponseInterface;
+
+class VerificationResponseDto extends AbstractResponseDto implements ApiResponseInterface
 {
     protected StatusDto $data;
 

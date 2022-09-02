@@ -9,16 +9,18 @@ use GuzzleHttp\RequestOptions;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\Notify;
-use Payum\Core\Security\TokenInterface;
 use Psr\Http\Message\ResponseInterface;
 use Softify\PayumPrzelewy24Bundle\Api\ApiInterface;
 use Softify\PayumPrzelewy24Bundle\Dto\ErrorResponseDto;
-use Softify\PayumPrzelewy24Bundle\Dto\NotificationDto;
-use Softify\PayumPrzelewy24Bundle\Dto\RegistrationDto;
-use Softify\PayumPrzelewy24Bundle\Dto\ResponseDtoInterface;
-use Softify\PayumPrzelewy24Bundle\Dto\TransactionResponseDto;
-use Softify\PayumPrzelewy24Bundle\Dto\VerificationDto;
-use Softify\PayumPrzelewy24Bundle\Dto\VerificationResponseDto;
+use Softify\PayumPrzelewy24Bundle\Dto\Marketplace\ApiKeyResponseDto;
+use Softify\PayumPrzelewy24Bundle\Dto\Marketplace\CrcResponseDto;
+use Softify\PayumPrzelewy24Bundle\Dto\Payment\NotificationDto;
+use Softify\PayumPrzelewy24Bundle\Dto\Payment\RegistrationDto;
+use Softify\PayumPrzelewy24Bundle\Dto\ApiResponseInterface;
+use Softify\PayumPrzelewy24Bundle\Dto\Payment\TransactionResponseDto;
+use Softify\PayumPrzelewy24Bundle\Dto\Payment\VerificationDto;
+use Softify\PayumPrzelewy24Bundle\Dto\Payment\VerificationResponseDto;
+use Softify\PayumPrzelewy24Bundle\Exception\PaymentException;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -27,21 +29,30 @@ class PaymentService
     private ClientInterface $httpClient;
     private SerializerInterface $serializer;
     private ApiInterface $api;
+    private MarketplaceService $marketplaceService;
 
-    public function __construct(SerializerInterface $serializer)
+    public function __construct(SerializerInterface $serializer, MarketplaceService $marketplaceService)
     {
         $this->httpClient = new Client();
         $this->serializer = $serializer;
+        $this->marketplaceService = $marketplaceService;
+    }
+
+    public function getMarketplaceService(): MarketplaceService
+    {
+        return $this->marketplaceService;
     }
 
     public function setApi(ApiInterface $api): self
     {
         $this->api = $api;
+        $this->marketplaceService->setApi($api);
         return $this;
     }
 
-    public function registerTransaction(Capture $request, string $urlStatus): ResponseDtoInterface
+    public function registerTransaction(Capture $request, string $urlStatus): ApiResponseInterface
     {
+        $this->preRequest();
         $dto = $this->createRegistrationDto($request, $urlStatus);
         return $this->doRequest(function() use ($dto) {
             return $this->httpClient->request(
@@ -55,8 +66,9 @@ class PaymentService
         }, TransactionResponseDto::class);
     }
 
-    public function verifyTransaction(Notify $request, NotificationDto $notificationDto): ResponseDtoInterface
+    public function verifyTransaction(Notify $request, NotificationDto $notificationDto): ApiResponseInterface
     {
+        $this->preRequest();
         $dto = $this->createVerificationDto($notificationDto);
         return $this->doRequest(function() use ($dto) {
             return $this->httpClient->request(
@@ -75,7 +87,7 @@ class PaymentService
         return $this->serializer->deserialize($payload, NotificationDto::class, 'json');
     }
 
-    protected function doRequest(callable $callback, string $model): ResponseDtoInterface
+    protected function doRequest(callable $callback, string $model): ApiResponseInterface
     {
         try {
             /** @var ResponseInterface $response */
@@ -148,7 +160,7 @@ class PaymentService
         ];
     }
 
-    protected function deserialize(string $content, string $model): ResponseDtoInterface
+    protected function deserialize(string $content, string $model): ApiResponseInterface
     {
         return $this->serializer->deserialize(
             $content,
@@ -158,5 +170,24 @@ class PaymentService
                 DateTimeNormalizer::FORMAT_KEY => 'U'
             ]
         );
+    }
+
+    protected function preRequest(): void
+    {
+        if ($this->api->isMarketplace()) {
+            /** @var CrcResponseDto $response */
+            $response = $this->marketplaceService->getCRCKey($this->api->getClientId());
+            if ($response instanceof ErrorResponseDto) {
+                throw PaymentException::newInstanceFromErrorResponse($response);
+            }
+            $this->api->setClientSecret($response->getData()->getCrc());
+
+            /** @var ApiKeyResponseDto $response */
+            $response = $this->marketplaceService->getApiKey($this->api->getClientId());
+            if ($response instanceof ErrorResponseDto) {
+                throw PaymentException::newInstanceFromErrorResponse($response);
+            }
+            $this->api->setApiKey($response->getApiKey());
+        }
     }
 }

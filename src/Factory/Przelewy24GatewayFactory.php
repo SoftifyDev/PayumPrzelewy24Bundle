@@ -15,20 +15,32 @@ class Przelewy24GatewayFactory extends GatewayFactory
                 'clientId' => null,
                 'clientSecret' => null,
                 'apiKey' => null,
-                'sandbox' => true
+                'marketplace' => false,
+                'marketplaceApiKey' => null,
+                'marketplaceClientId' => null,
+                'marketplaceApiUri' => null,
             ];
 
             $config->defaults($config['payum.default_options']);
             $config['payum.required_options'] = ['clientId', 'clientSecret', 'apiKey'];
+            $config['payum.marketplace_required_options'] = ['marketplaceApiKey', 'marketplaceClientId'];
 
             $config['payum.api'] = static function (ArrayObject $config) {
-                $config->validateNotEmpty($config['payum.required_options']);
+                if ($config['marketplace']) {
+                    $config->validateNotEmpty($config['payum.marketplace_required_options']);
+                } else {
+                    $config->validateNotEmpty($config['payum.required_options']);
+                }
                 return new Api(
                     [
-                        'clientId' => $config['clientId'],
+                        'clientId' => $config['clientId'] ? (int)$config['clientId'] : null,
                         'clientSecret' => $config['clientSecret'],
                         'apiKey' => $config['apiKey'],
-                        'sandbox' => $config['sandbox']
+                        'sandbox' => $config['sandbox'],
+                        'marketplace' => $config['marketplace'],
+                        'marketplaceApiKey' => $config['marketplaceApiKey'],
+                        'marketplaceClientId' => $config['marketplaceClientId'] ? (int)$config['marketplaceClientId'] : null,
+                        'marketplaceApiUri' => $config['marketplaceApiUri'],
                     ]
                 );
             };

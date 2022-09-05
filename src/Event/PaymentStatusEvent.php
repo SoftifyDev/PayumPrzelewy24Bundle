@@ -1,6 +1,6 @@
 <?php
 
-namespace Softify\PayumPrzelewy24Bundle\Action;
+namespace Softify\PayumPrzelewy24Bundle\Event;
 
 use Softify\PayumPrzelewy24Bundle\Entity\Payment;
 use Symfony\Contracts\EventDispatcher\Event;

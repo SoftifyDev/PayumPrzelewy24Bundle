@@ -13,6 +13,7 @@ use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Request\GetStatusInterface;
 use Softify\PayumPrzelewy24Bundle\Api\ApiInterface;
 use Softify\PayumPrzelewy24Bundle\Entity\Payment;
+use Softify\PayumPrzelewy24Bundle\Event\PaymentStatusEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class StatusAction implements ActionInterface, GatewayAwareInterface

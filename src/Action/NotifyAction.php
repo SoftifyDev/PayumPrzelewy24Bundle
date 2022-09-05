@@ -19,6 +19,7 @@ use Softify\PayumPrzelewy24Bundle\Dto\Marketplace\CrcResponseDto;
 use Softify\PayumPrzelewy24Bundle\Dto\Payment\NotificationDto;
 use Softify\PayumPrzelewy24Bundle\Dto\Payment\VerificationResponseDto;
 use Softify\PayumPrzelewy24Bundle\Entity\Payment;
+use Softify\PayumPrzelewy24Bundle\Event\PaymentStatusEvent;
 use Softify\PayumPrzelewy24Bundle\Service\PaymentService;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 

@@ -17,6 +17,7 @@
   "require": {
     "sensio/framework-extra-bundle": "^5.1",
     "payum/payum-bundle": "^2.0",
+    "symfony/uid": "^5.1|^6.0",
     "php-http/guzzle6-adapter": "^2.0"
   }
 }

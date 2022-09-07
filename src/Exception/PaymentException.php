@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Softify\PayumPrzelewy24Bundle\Exception;
 
 use Payum\Core\Exception\Http\HttpException;
-use Softify\PayumPrzelewy24Bundle\Dto\ErrorResponseDto;
+use Softify\PayumPrzelewy24Bundle\Dto\ErrorResponseInterface;
+use Softify\PayumPrzelewy24Bundle\Dto\Refund\TransactionRefundItemDto;
 
 final class PaymentException extends HttpException
 {
     public const LABEL = 'PaymentException';
 
-    public static function newInstanceFromErrorResponse(ErrorResponseDto $errorResponse): self
+    public static function newInstanceFromErrorResponse(ErrorResponseInterface $errorResponse): self
     {
         $parts = [self::LABEL];
 
@@ -20,7 +21,14 @@ final class PaymentException extends HttpException
         }
 
         if ($errorResponse->getError()) {
-            $parts[] = sprintf('[reason literal] %s' , $errorResponse->getError());
+            if (is_array($errorResponse->getError())) {
+                /** @var TransactionRefundItemDto $error */
+                foreach ($errorResponse->getError() as $error) {
+                    $parts[] = sprintf('[reason literal] %s' , $error->getMessage());
+                }
+            } else {
+                $parts[] = sprintf('[reason literal] %s' , $errorResponse->getError());
+            }
         }
 
         $message = implode(\PHP_EOL, $parts);

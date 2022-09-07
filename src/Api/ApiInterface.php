@@ -21,6 +21,7 @@ interface ApiInterface
     public const CANCELLED_STATUS = 'cancelled';
     public const CREATED_STATUS = 'created';
     public const PENDING_STATUS = 'pending';
+    public const REFUNDED_STATUS = 'refunded';
 
     public const URI_TRANSACTION_REGISTER = 'transaction/register';
     public const URI_TRANSACTION_VERIFY = 'transaction/verify';

@@ -73,6 +73,11 @@ final class StatusAction implements ActionInterface, GatewayAwareInterface
             return;
         }
 
+        if (ApiInterface::REFUNDED_STATUS === $details['state']) {
+            $request->markRefunded();
+            return;
+        }
+
         if (
             ApiInterface::CREATED_STATUS === $details['state']
             || ApiInterface::PENDING_STATUS === $details['state']

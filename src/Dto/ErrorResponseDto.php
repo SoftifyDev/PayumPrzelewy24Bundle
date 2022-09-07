@@ -2,7 +2,7 @@
 
 namespace Softify\PayumPrzelewy24Bundle\Dto;
 
-class ErrorResponseDto implements ApiResponseInterface
+class ErrorResponseDto implements ApiResponseInterface, ErrorResponseInterface
 {
     public string $error;
     public int $code;

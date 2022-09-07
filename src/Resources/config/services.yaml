@@ -20,6 +20,12 @@ services:
         tags:
             - { name: payum.action, factory: przelewy24, alias: payum.action.capture }
 
+    softify.payment.przelewy24.action.refund:
+        class: Softify\PayumPrzelewy24Bundle\Action\RefundAction
+        public: true
+        tags:
+            - { name: payum.action, factory: przelewy24, alias: payum.action.refund }
+
     softify.payment.przelewy24.action.notify:
         class: Softify\PayumPrzelewy24Bundle\Action\NotifyAction
         public: true

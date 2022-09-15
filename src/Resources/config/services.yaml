@@ -1,3 +1,109 @@
+parameters:
+    przelewy24_choices:
+        business_types:
+            - { value: 1, description: 'Osoba fizyczna'}
+            - { value: 2, description: 'Jednoosobowa działalność gospodarcza'}
+            - { value: 3, description: 'Spółka cywilna'}
+            - { value: 4, description: 'Spółka jawna'}
+            - { value: 5, description: 'Spółka komandytowa'}
+            - { value: 6, description: 'Spółka komandytowo-akcyjna'}
+            - { value: 7, description: 'Spółka akcyjna'}
+            - { value: 8, description: 'Spółka z ograniczoną odpowiedzialnością'}
+            - { value: 9, description: 'Stowarzyszenie, fundacja, organizacja pożytku publicznego'}
+            - { value: 10, description: 'Spółdzielnia'}
+        trades:
+            - { value: 'agd', description: 'AGD'}
+            - { value: 'agdrtv', description: 'AGD i RTV'}
+            - { value: 'alkoh', description: 'Alkohole'}
+            - { value: 'apteki', description: 'Apteki'}
+            - { value: 'artlab', description: 'Artykuły laboratoryjne'}
+            - { value: 'artmed', description: 'Artykuły medyczne'}
+            - { value: 'artspoz', description: 'Artykuły spożywcze'}
+            - { value: 'aukcje', description: 'Aukcje'}
+            - { value: 'behape', description: 'BHP'}
+            - { value: 'blizna', description: 'Bielizna'}
+            - { value: 'bilety', description: 'Bilety'}
+            - { value: 'buki', description: 'Bukmacher'}
+            - { value: 'biz', description: 'Biżuteria i zegarki'}
+            - { value: 'budow', description: 'Budownictwo'}
+            - { value: 'chemia', description: 'Chemia'}
+            - { value: 'czaspis', description: 'Czasopisma'}
+            - { value: 'dekor', description: 'Dekoracje'}
+            - { value: 'dewoc', description: 'Dewocjonalia'}
+            - { value: 'domiogr', description: 'Dom i ogród'}
+            - { value: 'dziecko', description: 'Dziecko'}
+            - { value: 'elektronika', description: 'Elektronika'}
+            - { value: 'epapier', description: 'E-papierosy'}
+            - { value: 'ezoter', description: 'Ezoteryka'}
+            - { value: 'filatel', description: 'Filatelistyka'}
+            - { value: 'finanse', description: 'Finanse'}
+            - { value: 'fotogr', description: 'Fotografia'}
+            - { value: 'fundacja', description: 'Fundacja'}
+            - { value: 'galant', description: 'Galanteria'}
+            - { value: 'gadzet', description: 'Gadżety'}
+            - { value: 'gry', description: 'Gry'}
+            - { value: 'komphost', description: 'Hosting'}
+            - { value: 'hotel', description: 'Hotelarstwo'}
+            - { value: 'instyt', description: 'Instytucje'}
+            - { value: 'komputery', description: 'Komputery'}
+            - { value: 'ksiazki', description: 'Książki'}
+            - { value: 'kosmetyki', description: 'Kosmetyki'}
+            - { value: 'ksieg', description: 'Księgarnia'}
+            - { value: 'kip', description: 'Kwiaty i prezenty'}
+            - { value: 'mwf', description: 'Masowi Wystawcy Faktur'}
+            - { value: 'maszyny', description: 'Maszyny'}
+            - { value: 'matbiur', description: 'Materiały biurowe'}
+            - { value: 'matfol', description: 'Materiały foliowe'}
+            - { value: 'matpap', description: 'Materiały papierowe'}
+            - { value: 'militaria', description: 'Militaria'}
+            - { value: 'motoryz', description: 'Motoryzacja'}
+            - { value: 'mim', description: 'Multimedia i muzyka'}
+            - { value: 'nagrob', description: 'Nagrobki'}
+            - { value: 'narzedzia', description: 'Narzędzia'}
+            - { value: 'nis', description: 'Nauka i szkolnictwo'}
+            - { value: 'numiz', description: 'Numizmatyka'}
+            - { value: 'obuwie', description: 'Obuwie'}
+            - { value: 'odziez', description: 'Odzież'}
+            - { value: 'ogl', description: 'Ogłoszenia'}
+            - { value: 'ogrod', description: 'Ogród'}
+            - { value: 'oprogra', description: 'Oprogramowanie'}
+            - { value: 'oswietl', description: 'Oświetlenie'}
+            - { value: 'pasman', description: 'Pasmanteria'}
+            - { value: 'podroze', description: 'Podróże'}
+            - { value: 'randki', description: 'Portal randkowy'}
+            - { value: 'portfel', description: 'Portfel elektroniczny'}
+            - { value: 'prasa', description: 'Prasa'}
+            - { value: 'prawo', description: 'Prawo'}
+            - { value: 'kurier', description: 'Przesyłki kurierskie'}
+            - { value: 'reklama', description: 'Reklama'}
+            - { value: 'rekodz', description: 'Rękodzieło'}
+            - { value: 'rodzice', description: 'Rodzice'}
+            - { value: 'rtv', description: 'RTV'}
+            - { value: 'serint', description: 'Serwis internetowy'}
+            - { value: 'sklmuz', description: 'Sklep muzyczny'}
+            - { value: 'siw', description: 'Sport i wypoczynek'}
+            - { value: 'suplem', description: 'Suplementy diety'}
+            - { value: 'szklo', description: 'Szkło'}
+            - { value: 'szkol', description: 'Szkolenia'}
+            - { value: 'sztuka', description: 'Sztuka'}
+            - { value: 'slubne', description: 'Ślubne'}
+            - { value: 'tif', description: 'Teatr i film'}
+            - { value: 'telek', description: 'Telekomunikacja'}
+            - { value: 'tkan', description: 'Tkaniny'}
+            - { value: 'twstrwww', description: 'Tworzenie stron WWW'}
+            - { value: 'ubezp', description: 'Ubezpieczenia'}
+            - { value: 'uslugi', description: 'Usługi'}
+            - { value: 'wielob', description: 'Wielobranżowość'}
+            - { value: 'wpc', description: 'WP -conceptshop.pl'}
+            - { value: 'wypmiesz', description: 'Wyposażenie mieszkania'}
+            - { value: 'wypsklep', description: 'Wyposażenie sklepów'}
+            - { value: 'wyrtyt', description: 'Wyroby tytoniowe'}
+            - { value: 'wio', description: 'Wzrok i okulary'}
+            - { value: 'vod', description: 'Vod'}
+            - { value: 'zabawki', description: 'Zabawki'}
+            - { value: 'zik', description: 'Zdrowie i kosmetyki'}
+            - { value: 'zwierz', description: 'Zwierzęta'}
+
 services:
     _defaults:
         autowire: true
@@ -31,6 +137,12 @@ services:
         public: true
         tags:
             - { name: payum.action, factory: przelewy24, alias: payum.action.notify }
+
+    softify.payment.przelewy24.action.register:
+        class: Softify\PayumPrzelewy24Bundle\Action\RegisterAction
+        public: true
+        tags:
+            - { name: payum.action, factory: przelewy24, alias: payum.action.register }
 
     softify.payment.przelewy24.action.status:
         class: Softify\PayumPrzelewy24Bundle\Action\StatusAction

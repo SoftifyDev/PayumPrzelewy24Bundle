@@ -2,6 +2,7 @@
 
 namespace Softify\PayumPrzelewy24Bundle\Service;
 
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use Softify\PayumPrzelewy24Bundle\Api\ApiInterface;
 use Softify\PayumPrzelewy24Bundle\Dto\Marketplace\ApiKeyResponseDto;
 use Softify\PayumPrzelewy24Bundle\Dto\ApiResponseInterface;
@@ -11,6 +12,8 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\ResponseInterface;
+use Softify\PayumPrzelewy24Bundle\Dto\Marketplace\MerchantRegisterResponseDto;
+use Softify\PayumPrzelewy24Bundle\Request\Register;
 use Symfony\Component\Serializer\SerializerInterface;
 use GuzzleHttp\Client;
 
@@ -58,6 +61,21 @@ class MarketplaceService
                 ]
             );
         }, ApiKeyResponseDto::class);
+    }
+
+    public function register(Register $register): ApiResponseInterface
+    {
+        return $this->doRequest(function () use ($register) {
+            return $this->httpClient->request(
+                'POST',
+                sprintf('%s/merchant/register', $this->api->getMarketplaceApiUri()),
+                [
+                    RequestOptions::BODY => $this->serializer->serialize($register->getMerchantRegister(), 'json'),
+                    RequestOptions::AUTH => $this->getAuthData(),
+                    RequestOptions::HEADERS => $this->getHeaders(),
+                ]
+            );
+        }, MerchantRegisterResponseDto::class);
     }
 
     protected function doRequest(callable $callback, string $model): ApiResponseInterface

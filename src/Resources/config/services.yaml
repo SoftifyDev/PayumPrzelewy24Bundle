@@ -150,6 +150,12 @@ services:
         tags:
             - { name: payum.action, factory: przelewy24, alias: payum.action.status }
 
+    softify.payment.przelewy24.action.verify_merchant_id:
+        class: Softify\PayumPrzelewy24Bundle\Action\VerifyMerchantIdAction
+        public: true
+        tags:
+            - { name: payum.action, factory: przelewy24, alias: payum.action.verify_merchant_id }
+
     softify.payment.przelewy24.action.convert_payment:
         class: Softify\PayumPrzelewy24Bundle\Action\ConvertPaymentAction
         public: true

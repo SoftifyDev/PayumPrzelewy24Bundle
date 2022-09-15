@@ -2,8 +2,8 @@
 
 namespace Softify\PayumPrzelewy24Bundle\Service;
 
-use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use Softify\PayumPrzelewy24Bundle\Api\ApiInterface;
+use Softify\PayumPrzelewy24Bundle\Dto\Marketplace\AffiliatesResponseDto;
 use Softify\PayumPrzelewy24Bundle\Dto\Marketplace\ApiKeyResponseDto;
 use Softify\PayumPrzelewy24Bundle\Dto\ApiResponseInterface;
 use Softify\PayumPrzelewy24Bundle\Dto\Marketplace\CrcResponseDto;
@@ -14,6 +14,7 @@ use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\ResponseInterface;
 use Softify\PayumPrzelewy24Bundle\Dto\Marketplace\MerchantRegisterResponseDto;
 use Softify\PayumPrzelewy24Bundle\Request\Register;
+use Softify\PayumPrzelewy24Bundle\Request\VerifyMerchantId;
 use Symfony\Component\Serializer\SerializerInterface;
 use GuzzleHttp\Client;
 
@@ -76,6 +77,21 @@ class MarketplaceService
                 ]
             );
         }, MerchantRegisterResponseDto::class);
+    }
+
+    public function merchantExists(VerifyMerchantId $verifyMerchantId): ApiResponseInterface
+    {
+        return $this->doRequest(function () use ($verifyMerchantId) {
+            return $this->httpClient->request(
+                'GET',
+                sprintf('%s/multiStore/affiliates', $this->api->getMarketplaceApiUri()),
+                [
+                    RequestOptions::QUERY => ['affiliateId' => $verifyMerchantId->getMerchantId()],
+                    RequestOptions::AUTH => $this->getAuthData(),
+                    RequestOptions::HEADERS => $this->getHeaders(),
+                ]
+            );
+        }, AffiliatesResponseDto::class);
     }
 
     protected function doRequest(callable $callback, string $model): ApiResponseInterface

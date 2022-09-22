@@ -120,12 +120,17 @@ class MarketplaceService
         try {
             /** @var ResponseInterface $response */
             $response = $callback();
+            $code = null;
         } catch (RequestException $exception) {
+            $code = $exception->getCode();
             $response = $exception->getResponse();
             $model = ErrorResponseDto::class;
         } finally {
             $body = $response->getBody()->getContents();
             $apiResponse = $this->serializer->deserialize($body, $model, 'json');
+        }
+        if ($apiResponse instanceof ErrorResponseDto && $code) {
+            $apiResponse->setCode($code);
         }
         return $apiResponse;
     }

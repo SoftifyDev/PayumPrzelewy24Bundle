@@ -6,7 +6,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use Payum\Core\Payum;
 use Softify\PayumPrzelewy24Bundle\Dto\Marketplace\AffiliatesResponseDto;
-use Softify\PayumPrzelewy24Bundle\Request\VerifyMerchantId;
+use Softify\PayumPrzelewy24Bundle\Request\VerifyMerchantIdRequest;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
@@ -37,12 +37,15 @@ class MerchantIdValidator extends ConstraintValidator
 
         $class = $em->getClassMetadata(\get_class($value));
 
-
         $merchantId = $this->getFieldValue($constraint->merchantIdField, $class, $value);
+        if (empty($merchantId)) {
+            return;
+        }
+
         $nip = $this->getFieldValue($constraint->nipField, $class, $value);
         $regon = $constraint->regonField ? $this->getFieldValue($constraint->regonField, $class, $value) : null;
 
-        $verifyMerchantIdRequest = new VerifyMerchantId($merchantId, $nip, $regon);
+        $verifyMerchantIdRequest = new VerifyMerchantIdRequest($merchantId, $nip, $regon);
         $this->payum->getGateway('przelewy24')->execute($verifyMerchantIdRequest);
 
         $response = $verifyMerchantIdRequest->getAffiliatesResponseDto();
@@ -54,13 +57,6 @@ class MerchantIdValidator extends ConstraintValidator
                     ->atPath($constraint->merchantIdField)
                     ->addViolation();
             } else {
-                if ($response->getData()[0]->getCustomerStatus() === 'Not verified') {
-                    $this->context->buildViolation($constraint->messageNotVerified)
-                        ->setTranslationDomain('validators')
-                        ->setCode('3a8a7548-1fcb-4968-a359-c4e44044b7bd')
-                        ->atPath($constraint->merchantIdField)
-                        ->addViolation();
-                }
                 if ($response->getData()[0]->getNip() !== $nip) {
                     $this->context->buildViolation($constraint->messageDifferentNip)
                         ->setTranslationDomain('validators')

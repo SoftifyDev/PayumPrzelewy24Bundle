@@ -10,7 +10,7 @@ use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
 use Payum\Core\Security\GenericTokenFactoryAwareTrait;
 use Softify\PayumPrzelewy24Bundle\Api\ApiAwareTrait;
-use Softify\PayumPrzelewy24Bundle\Request\Register;
+use Softify\PayumPrzelewy24Bundle\Request\RegisterRequest;
 use Softify\PayumPrzelewy24Bundle\Service\MarketplaceService;
 use Softify\PayumPrzelewy24Bundle\Service\PaymentService;
 
@@ -31,7 +31,7 @@ final class RegisterAction implements ApiAwareInterface, ActionInterface, Gatewa
 
     public function execute($request): void
     {
-        /** @var Register $request */
+        /** @var RegisterRequest $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $request->setApiResponse($this->marketplaceService->register($request));
@@ -39,6 +39,6 @@ final class RegisterAction implements ApiAwareInterface, ActionInterface, Gatewa
 
     public function supports($request): bool
     {
-        return $request instanceof Register;
+        return $request instanceof RegisterRequest;
     }
 }

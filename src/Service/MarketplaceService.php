@@ -12,9 +12,11 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\ResponseInterface;
+use Softify\PayumPrzelewy24Bundle\Dto\Marketplace\MerchantExistsResponseDto;
 use Softify\PayumPrzelewy24Bundle\Dto\Marketplace\MerchantRegisterResponseDto;
-use Softify\PayumPrzelewy24Bundle\Request\Register;
-use Softify\PayumPrzelewy24Bundle\Request\VerifyMerchantId;
+use Softify\PayumPrzelewy24Bundle\Request\MerchantExistsRequest;
+use Softify\PayumPrzelewy24Bundle\Request\RegisterRequest;
+use Softify\PayumPrzelewy24Bundle\Request\VerifyMerchantIdRequest;
 use Symfony\Component\Serializer\SerializerInterface;
 use GuzzleHttp\Client;
 
@@ -64,14 +66,14 @@ class MarketplaceService
         }, ApiKeyResponseDto::class);
     }
 
-    public function register(Register $register): ApiResponseInterface
+    public function register(RegisterRequest $request): ApiResponseInterface
     {
-        return $this->doRequest(function () use ($register) {
+        return $this->doRequest(function () use ($request) {
             return $this->httpClient->request(
                 'POST',
                 sprintf('%s/merchant/register', $this->api->getMarketplaceApiUri()),
                 [
-                    RequestOptions::BODY => $this->serializer->serialize($register->getMerchantRegister(), 'json'),
+                    RequestOptions::BODY => $this->serializer->serialize($request->getMerchantRegister(), 'json'),
                     RequestOptions::AUTH => $this->getAuthData(),
                     RequestOptions::HEADERS => $this->getHeaders(),
                 ]
@@ -79,19 +81,38 @@ class MarketplaceService
         }, MerchantRegisterResponseDto::class);
     }
 
-    public function merchantExists(VerifyMerchantId $verifyMerchantId): ApiResponseInterface
+    public function findMerchant(VerifyMerchantIdRequest $request): ApiResponseInterface
     {
-        return $this->doRequest(function () use ($verifyMerchantId) {
+        return $this->doRequest(function () use ($request) {
             return $this->httpClient->request(
                 'GET',
                 sprintf('%s/multiStore/affiliates', $this->api->getMarketplaceApiUri()),
                 [
-                    RequestOptions::QUERY => ['affiliateId' => $verifyMerchantId->getMerchantId()],
+                    RequestOptions::QUERY => ['affiliateId' => $request->getMerchantId()],
                     RequestOptions::AUTH => $this->getAuthData(),
                     RequestOptions::HEADERS => $this->getHeaders(),
                 ]
             );
         }, AffiliatesResponseDto::class);
+    }
+
+    public function merchantExists(MerchantExistsRequest $request): ApiResponseInterface
+    {
+        return $this->doRequest(function () use ($request) {
+            return $this->httpClient->request(
+                'GET',
+                sprintf(
+                    '%s/merchant/exists/%s/%s',
+                    $this->api->getMarketplaceApiUri(),
+                    $request->getType(),
+                    $request->getValue()
+                ),
+                [
+                    RequestOptions::AUTH => $this->getAuthData(),
+                    RequestOptions::HEADERS => $this->getHeaders(),
+                ]
+            );
+        }, MerchantExistsResponseDto::class);
     }
 
     protected function doRequest(callable $callback, string $model): ApiResponseInterface

@@ -5,7 +5,7 @@ namespace Softify\PayumPrzelewy24Bundle\Request;
 use Softify\PayumPrzelewy24Bundle\Dto\ApiResponseInterface;
 use Softify\PayumPrzelewy24Bundle\Dto\Marketplace\MerchantRegisterDto;
 
-class Register
+class RegisterRequest
 {
     protected MerchantRegisterDto $merchantRegister;
     protected ApiResponseInterface $apiResponse;
@@ -25,7 +25,7 @@ class Register
         return $this->apiResponse;
     }
 
-    public function setApiResponse(ApiResponseInterface $apiResponse): Register
+    public function setApiResponse(ApiResponseInterface $apiResponse): self
     {
         $this->apiResponse = $apiResponse;
         return $this;

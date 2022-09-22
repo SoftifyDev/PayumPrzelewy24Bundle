@@ -10,11 +10,11 @@ use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
 use Payum\Core\Security\GenericTokenFactoryAwareTrait;
 use Softify\PayumPrzelewy24Bundle\Api\ApiAwareTrait;
-use Softify\PayumPrzelewy24Bundle\Request\VerifyMerchantIdRequest;
+use Softify\PayumPrzelewy24Bundle\Request\MerchantExistsRequest;
 use Softify\PayumPrzelewy24Bundle\Service\MarketplaceService;
 use Softify\PayumPrzelewy24Bundle\Service\PaymentService;
 
-final class VerifyMerchantIdAction implements ApiAwareInterface, ActionInterface, GatewayAwareInterface, GenericTokenFactoryAwareInterface
+final class MerchantExistsAction implements ApiAwareInterface, ActionInterface, GatewayAwareInterface, GenericTokenFactoryAwareInterface
 {
     use GenericTokenFactoryAwareTrait;
     use GatewayAwareTrait;
@@ -31,13 +31,13 @@ final class VerifyMerchantIdAction implements ApiAwareInterface, ActionInterface
 
     public function execute($request): void
     {
-        /** @var VerifyMerchantIdRequest $request */
+        /** @var MerchantExistsRequest $request */
         RequestNotSupportedException::assertSupports($this, $request);
-        $request->setAffiliatesResponseDto($this->marketplaceService->findMerchant($request));
+        $request->setMerchantExistsResponseDto($this->marketplaceService->merchantExists($request));
     }
 
     public function supports($request): bool
     {
-        return $request instanceof VerifyMerchantIdRequest;
+        return $request instanceof MerchantExistsRequest;
     }
 }

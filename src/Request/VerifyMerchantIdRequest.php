@@ -4,7 +4,7 @@ namespace Softify\PayumPrzelewy24Bundle\Request;
 
 use Softify\PayumPrzelewy24Bundle\Dto\ApiResponseInterface;
 
-class VerifyMerchantId
+class VerifyMerchantIdRequest
 {
     protected int $merchantId;
     protected string $nip;
@@ -39,7 +39,7 @@ class VerifyMerchantId
         return $this->affiliatesResponseDto;
     }
 
-    public function setAffiliatesResponseDto(ApiResponseInterface $affiliatesResponseDto): VerifyMerchantId
+    public function setAffiliatesResponseDto(ApiResponseInterface $affiliatesResponseDto): self
     {
         $this->affiliatesResponseDto = $affiliatesResponseDto;
         return $this;

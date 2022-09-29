@@ -2,7 +2,7 @@
 
 namespace Softify\PayumPrzelewy24Bundle\Validator\Constraints;
 
-use Payum\Core\Payum;
+use Payum\Core\PayumBuilder;
 use Softify\PayumPrzelewy24Bundle\Dto\Marketplace\MerchantExistsResponseDto;
 use Softify\PayumPrzelewy24Bundle\Dto\Marketplace\MerchantRegisterDto;
 use Softify\PayumPrzelewy24Bundle\Request\MerchantExistsRequest;
@@ -12,11 +12,11 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 class MerchantExistsValidator extends ConstraintValidator
 {
-    private Payum $payum;
+    private PayumBuilder $payumBuilder;
 
-    public function __construct(Payum $payum)
+    public function __construct(PayumBuilder $payumBuilder)
     {
-        $this->payum = $payum;
+        $this->payumBuilder = $payumBuilder;
     }
 
     public function validate($value, Constraint $constraint): void
@@ -37,7 +37,7 @@ class MerchantExistsValidator extends ConstraintValidator
         }
 
         if ($request) {
-            $this->payum->getGateway('przelewy24')->execute($request);
+            $this->payumBuilder->getPayum()->getGateway('przelewy24')->execute($request);
             if (!$request->getMerchantExistsResponseDto() instanceof MerchantExistsResponseDto) {
                 $this->context->buildViolation($constraint->message)
                     ->setTranslationDomain('validators')

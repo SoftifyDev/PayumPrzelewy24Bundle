@@ -4,7 +4,7 @@ namespace Softify\PayumPrzelewy24Bundle\Validator\Constraints;
 
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\Mapping\ClassMetadata;
-use Payum\Core\Payum;
+use Payum\Core\PayumBuilder;
 use Softify\PayumPrzelewy24Bundle\Dto\Marketplace\AffiliatesResponseDto;
 use Softify\PayumPrzelewy24Bundle\Request\VerifyMerchantIdRequest;
 use Symfony\Component\Validator\Constraint;
@@ -15,12 +15,12 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 class MerchantIdValidator extends ConstraintValidator
 {
     private ManagerRegistry $registry;
-    private Payum $payum;
+    private PayumBuilder $payumBuilder;
 
-    public function __construct(ManagerRegistry $registry, Payum $payum)
+    public function __construct(ManagerRegistry $registry, PayumBuilder $payumBuilder)
     {
         $this->registry = $registry;
-        $this->payum = $payum;
+        $this->payumBuilder = $payumBuilder;
     }
 
     public function validate($value, Constraint $constraint): void
@@ -46,7 +46,7 @@ class MerchantIdValidator extends ConstraintValidator
         $regon = $constraint->regonField ? $this->getFieldValue($constraint->regonField, $class, $value) : null;
 
         $verifyMerchantIdRequest = new VerifyMerchantIdRequest($merchantId, $nip, $regon);
-        $this->payum->getGateway('przelewy24')->execute($verifyMerchantIdRequest);
+        $this->payumBuilder->getPayum()->getGateway('przelewy24')->execute($verifyMerchantIdRequest);
 
         $response = $verifyMerchantIdRequest->getAffiliatesResponseDto();
         if ($response instanceof AffiliatesResponseDto) {

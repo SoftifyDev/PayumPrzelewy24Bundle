@@ -167,3 +167,5 @@ services:
         public: true
         tags:
             - { name: payum.action, factory: przelewy24, alias: payum.action.convert_payment }
+
+    Payum\Core\PayumBuilder: '@payum.builder'

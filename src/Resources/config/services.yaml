@@ -162,6 +162,12 @@ services:
         tags:
             - { name: payum.action, factory: przelewy24, alias: payum.action.verify_merchant_id }
 
+    softify.payment.przelewy24.action.payment_details:
+        class: Softify\PayumPrzelewy24Bundle\Action\PaymentDetailsAction
+        public: true
+        tags:
+            - { name: payum.action, factory: przelewy24, alias: payum.action.payment_details }
+
     softify.payment.przelewy24.action.convert_payment:
         class: Softify\PayumPrzelewy24Bundle\Action\ConvertPaymentAction
         public: true

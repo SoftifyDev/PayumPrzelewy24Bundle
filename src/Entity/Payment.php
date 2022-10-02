@@ -23,7 +23,7 @@ abstract class Payment extends BasePayment
     protected string $status;
 
     /**
-     * @ORM\Column(name="merchant_id", type="string", nullable=true)
+     * @ORM\Column(name="merchant_id", type="integer", nullable=true)
      */
     protected ?int $merchantId = null;
 

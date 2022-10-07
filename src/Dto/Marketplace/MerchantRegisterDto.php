@@ -121,11 +121,6 @@ class MerchantRegisterDto
     protected ?string $regon = null;
 
     /**
-     * The parameter is available only to selected Partners.
-     */
-    protected bool $acceptance = false;
-
-    /**
      * @var RepresentativeDto[]
      * @Assert\Valid()
      */
@@ -372,17 +367,6 @@ class MerchantRegisterDto
     public function setRegon(string $regon): MerchantRegisterDto
     {
         $this->regon = $regon;
-        return $this;
-    }
-
-    public function isAcceptance(): bool
-    {
-        return $this->acceptance;
-    }
-
-    public function setAcceptance(bool $acceptance): MerchantRegisterDto
-    {
-        $this->acceptance = $acceptance;
         return $this;
     }
 

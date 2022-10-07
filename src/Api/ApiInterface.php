@@ -7,8 +7,8 @@ interface ApiInterface
     public const ENVIRONMENT_SANDBOX = 'sandbox';
     public const ENVIRONMENT_PRODUCTION = 'production';
 
-    public const URL_PRODUCTION = 'https://secure.przelewy24.pl/';
-    public const URL_SANDBOX = 'https://sandbox.przelewy24.pl/';
+    public const URL_PRODUCTION = 'https://secure.przelewy24.pl';
+    public const URL_SANDBOX = 'https://sandbox.przelewy24.pl';
 
     public const API_URL_PRODUCTION = 'https://secure.przelewy24.pl/api/v1';
     public const API_URL_SANDBOX = 'https://sandbox.przelewy24.pl/api/v1';

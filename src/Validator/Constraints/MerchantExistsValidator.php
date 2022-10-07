@@ -38,7 +38,7 @@ class MerchantExistsValidator extends ConstraintValidator
 
         if ($request) {
             $this->payumBuilder->getPayum()->getGateway('przelewy24')->execute($request);
-            if (!$request->getMerchantExistsResponseDto() instanceof MerchantExistsResponseDto) {
+            if ($request->getMerchantExistsResponseDto() instanceof MerchantExistsResponseDto) {
                 $this->context->buildViolation($constraint->message)
                     ->setTranslationDomain('validators')
                     ->setCode('75fb2329-7326-41b7-aa0d-c98de23775e4')

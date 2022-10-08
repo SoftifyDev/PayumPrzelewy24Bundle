@@ -12,6 +12,7 @@ class Api implements ApiInterface
     private ?string $marketplaceApiKey;
     private ?int $marketplaceClientId;
     private ?string $marketplaceApiUri;
+    private array $actions;
 
     /**
      * @param array $parameters
@@ -26,6 +27,7 @@ class Api implements ApiInterface
         $this->marketplaceApiKey = $parameters['marketplaceApiKey'];
         $this->marketplaceClientId = $parameters['marketplaceClientId'];
         $this->marketplaceApiUri = $parameters['marketplaceApiUri'];
+        $this->actions = $parameters['actions'] ?? [];
     }
 
     public function getClientId(): ?int
@@ -94,5 +96,10 @@ class Api implements ApiInterface
             return $this->marketplaceApiUri ?? self::API_URL_PRODUCTION;
         }
         return null;
+    }
+
+    public function invalidateCaptureToken(): bool
+    {
+        return $this->actions['invalidateCaptureToken'] ?? true;
     }
 }

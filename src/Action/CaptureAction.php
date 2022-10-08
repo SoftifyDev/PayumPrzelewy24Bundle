@@ -41,10 +41,9 @@ final class CaptureAction implements ApiAwareInterface, ActionInterface, Gateway
         $this->setMerchantIdFromPayment($request);
         /** @var ArrayObject $model */
         $model = $request->getModel();
+        /** @var TokenInterface $token */
+        $token = $request->getToken();
         if ($model['urlPayment'] === null || ($model['urlPayment'] && $model['state'] === ApiInterface::CREATED_STATUS)) {
-            /** @var TokenInterface $token */
-            $token = $request->getToken();
-
             if ($model['urlPayment'] === null) {
                 $notifyToken = $this->createNotifyToken($token->getGatewayName(), $request->getFirstModel());
                 $model['urlStatus'] = $notifyToken->getTargetUrl();
@@ -66,6 +65,9 @@ final class CaptureAction implements ApiAwareInterface, ActionInterface, Gateway
                 }
             }
             throw new HttpRedirect($model['urlPayment']);
+        }
+        if (!$this->api->invalidateCaptureToken()) {
+            throw new HttpRedirect($token->getAfterUrl());
         }
     }
 

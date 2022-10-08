@@ -43,4 +43,5 @@ interface ApiInterface
     public function getMarketplaceApiKey(): ?string;
     public function getMarketplaceClientId(): ?int;
     public function getMarketplaceApiUri(): ?string;
+    public function invalidateCaptureToken(): bool;
 }

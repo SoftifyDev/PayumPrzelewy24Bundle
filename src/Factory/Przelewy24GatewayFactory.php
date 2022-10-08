@@ -19,6 +19,9 @@ class Przelewy24GatewayFactory extends GatewayFactory
                 'marketplaceApiKey' => null,
                 'marketplaceClientId' => null,
                 'marketplaceApiUri' => null,
+                'actions' => [
+                    'invalidateCaptureToken' => true
+                ]
             ];
 
             $config->defaults($config['payum.default_options']);
@@ -41,6 +44,7 @@ class Przelewy24GatewayFactory extends GatewayFactory
                         'marketplaceApiKey' => $config['marketplaceApiKey'],
                         'marketplaceClientId' => $config['marketplaceClientId'] ? (int)$config['marketplaceClientId'] : null,
                         'marketplaceApiUri' => $config['marketplaceApiUri'],
+                        'actions' => $config['actions'],
                     ]
                 );
             };

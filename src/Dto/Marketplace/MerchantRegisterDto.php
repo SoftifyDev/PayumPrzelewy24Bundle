@@ -128,104 +128,30 @@ class MerchantRegisterDto
 
     /**
      * @Assert\NotBlank()
-     * @Assert\Length(max=50)
-     * @SerializedName("contact_person[name]")
+     * @Assert\Valid()
+     * @SerializedName("contact_person")
      */
-    protected string $contactPersonName;
+    protected ContactDto $contactPerson;
 
     /**
      * @Assert\NotBlank()
-     * @Assert\Length(max=50)
-     * @Assert\Email()
-     * @SerializedName("contact_person[email]")
+     * @Assert\Valid()
+     * @SerializedName("technical_contact")
      */
-    protected string $contactPersonEmail;
+    protected ContactDto $technicalContact;
 
     /**
      * @Assert\NotBlank()
-     * @Assert\Length(max=9)
-     * @SerializedName("contact_person[phone_number]")
+     * @Assert\Valid()
      */
-    protected string $contactPersonPhoneNumber;
+    protected AddressDto $address;
 
     /**
      * @Assert\NotBlank()
-     * @SerializedName("technical_contact[name]")
+     * @Assert\Valid()
+     * @SerializedName("correspondence_address")
      */
-    protected string $technicalContactName;
-
-    /**
-     * @Assert\NotBlank()
-     * @Assert\Email()
-     * @SerializedName("technical_contact[email]")
-     */
-    protected string $technicalContactEmail;
-
-    /**
-     * @Assert\NotBlank()
-     * @Assert\Length(max=9)
-     * @SerializedName("technical_contact[phone_number]")
-     */
-    protected string $technicalContactPhoneNumber;
-
-    /**
-     * @Assert\NotBlank()
-     * @Assert\EqualTo("PL")
-     * @SerializedName("address[country]")
-     */
-    protected string $addressCountry = 'PL';
-
-    /**
-     * @Assert\NotBlank()
-     * @Assert\Length(min=3, max=50)
-     * @SerializedName("address[city]")
-     */
-    protected string $addressCity;
-
-    /**
-     * Format 00-000
-     *
-     * @Assert\NotBlank()
-     * @Assert\Regex("/^([0-9]{2})-([0-9]{3})$/")
-     * @SerializedName("address[post_code]")
-     */
-    protected string $addressPostCode;
-
-    /**
-     * @Assert\NotBlank()
-     * @Assert\Length(min=3, max=100)
-     * @SerializedName("address[street]")
-     */
-    protected string $addressStreet;
-
-    /**
-     * @Assert\NotBlank()
-     * @Assert\EqualTo("PL")
-     * @SerializedName("correspondence_address[country]")
-     */
-    protected string $correspondenceAddressCountry = 'PL';
-
-    /**
-     * @Assert\NotBlank()
-     * @Assert\Length(min=3, max=50)
-     * @SerializedName("correspondence_address[city]")
-     */
-    protected string $correspondenceAddressCity;
-
-    /**
-     * Format 00-000
-     * @Assert\NotBlank()
-     * @Assert\Regex("/^([0-9]{2})-([0-9]{3})$/")
-     * @SerializedName("correspondence_address[post_code]")
-     */
-    protected string $correspondenceAddressPostCode;
-
-    /**
-     * @Assert\NotBlank()
-     * @Assert\Length(min=3, max=100)
-     * @SerializedName("correspondence_address[street]")
-     */
-    protected string $correspondenceAddressStreet;
+    protected AddressDto $correspondenceAddress;
 
     public function getBusinessType(): int
     {
@@ -381,157 +307,47 @@ class MerchantRegisterDto
         return $this;
     }
 
-    public function getContactPersonName(): string
+    public function getContactPerson(): ContactDto
     {
-        return $this->contactPersonName;
+        return $this->contactPerson;
     }
 
-    public function setContactPersonName(string $contactPersonName): MerchantRegisterDto
+    public function setContactPerson(ContactDto $contactPerson): MerchantRegisterDto
     {
-        $this->contactPersonName = $contactPersonName;
+        $this->contactPerson = $contactPerson;
         return $this;
     }
 
-    public function getContactPersonEmail(): string
+    public function getTechnicalContact(): ContactDto
     {
-        return $this->contactPersonEmail;
+        return $this->technicalContact;
     }
 
-    public function setContactPersonEmail(string $contactPersonEmail): MerchantRegisterDto
+    public function setTechnicalContact(ContactDto $technicalContact): MerchantRegisterDto
     {
-        $this->contactPersonEmail = $contactPersonEmail;
+        $this->technicalContact = $technicalContact;
         return $this;
     }
 
-    public function getContactPersonPhoneNumber(): string
+    public function getAddress(): AddressDto
     {
-        return $this->contactPersonPhoneNumber;
+        return $this->address;
     }
 
-    public function setContactPersonPhoneNumber(string $contactPersonPhoneNumber): MerchantRegisterDto
+    public function setAddress(AddressDto $address): MerchantRegisterDto
     {
-        $this->contactPersonPhoneNumber = $contactPersonPhoneNumber;
+        $this->address = $address;
         return $this;
     }
 
-    public function getTechnicalContactName(): string
+    public function getCorrespondenceAddress(): AddressDto
     {
-        return $this->technicalContactName;
+        return $this->correspondenceAddress;
     }
 
-    public function setTechnicalContactName(string $technicalContactName): MerchantRegisterDto
+    public function setCorrespondenceAddress(AddressDto $correspondenceAddress): MerchantRegisterDto
     {
-        $this->technicalContactName = $technicalContactName;
-        return $this;
-    }
-
-    public function getTechnicalContactEmail(): string
-    {
-        return $this->technicalContactEmail;
-    }
-
-    public function setTechnicalContactEmail(string $technicalContactEmail): MerchantRegisterDto
-    {
-        $this->technicalContactEmail = $technicalContactEmail;
-        return $this;
-    }
-
-    public function getTechnicalContactPhoneNumber(): string
-    {
-        return $this->technicalContactPhoneNumber;
-    }
-
-    public function setTechnicalContactPhoneNumber(string $technicalContactPhoneNumber): MerchantRegisterDto
-    {
-        $this->technicalContactPhoneNumber = $technicalContactPhoneNumber;
-        return $this;
-    }
-
-    public function getAddressCountry(): string
-    {
-        return $this->addressCountry;
-    }
-
-    public function setAddressCountry(string $addressCountry): MerchantRegisterDto
-    {
-        $this->addressCountry = $addressCountry;
-        return $this;
-    }
-
-    public function getAddressCity(): string
-    {
-        return $this->addressCity;
-    }
-
-    public function setAddressCity(string $addressCity): MerchantRegisterDto
-    {
-        $this->addressCity = $addressCity;
-        return $this;
-    }
-
-    public function getAddressPostCode(): string
-    {
-        return $this->addressPostCode;
-    }
-
-    public function setAddressPostCode(string $addressPostCode): MerchantRegisterDto
-    {
-        $this->addressPostCode = $addressPostCode;
-        return $this;
-    }
-
-    public function getAddressStreet(): string
-    {
-        return $this->addressStreet;
-    }
-
-    public function setAddressStreet(string $addressStreet): MerchantRegisterDto
-    {
-        $this->addressStreet = $addressStreet;
-        return $this;
-    }
-
-    public function getCorrespondenceAddressCountry(): string
-    {
-        return $this->correspondenceAddressCountry;
-    }
-
-    public function setCorrespondenceAddressCountry(string $correspondenceAddressCountry): MerchantRegisterDto
-    {
-        $this->correspondenceAddressCountry = $correspondenceAddressCountry;
-        return $this;
-    }
-
-    public function getCorrespondenceAddressCity(): string
-    {
-        return $this->correspondenceAddressCity;
-    }
-
-    public function setCorrespondenceAddressCity(string $correspondenceAddressCity): MerchantRegisterDto
-    {
-        $this->correspondenceAddressCity = $correspondenceAddressCity;
-        return $this;
-    }
-
-    public function getCorrespondenceAddressPostCode(): string
-    {
-        return $this->correspondenceAddressPostCode;
-    }
-
-    public function setCorrespondenceAddressPostCode(string $correspondenceAddressPostCode): MerchantRegisterDto
-    {
-        $this->correspondenceAddressPostCode = $correspondenceAddressPostCode;
-        return $this;
-    }
-
-    public function getCorrespondenceAddressStreet(): string
-    {
-        return $this->correspondenceAddressStreet;
-    }
-
-    public function setCorrespondenceAddressStreet(string $correspondenceAddressStreet): MerchantRegisterDto
-    {
-        $this->correspondenceAddressStreet = $correspondenceAddressStreet;
+        $this->correspondenceAddress = $correspondenceAddress;
         return $this;
     }
 }

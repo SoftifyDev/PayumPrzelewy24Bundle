@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraint;
 class MerchantId extends Constraint
 {
     public string $messageError = 'error_in_response';
-    public string $messageEmptyResponse = 'missing_merchant_id';
+    public string $messageNotFoundResponse = 'missing_merchant_id';
     public string $messageNotVerified = 'not_verified';
     public string $messageDifferentNip = 'different_nip';
     public string $messageDifferentRegon = 'different_regon';

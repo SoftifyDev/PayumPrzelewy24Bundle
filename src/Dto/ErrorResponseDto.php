@@ -6,7 +6,7 @@ class ErrorResponseDto implements ApiResponseInterface, ErrorResponseInterface
 {
     public string $error;
     public int $code;
-    public array $data = [];
+    public ?array $data = [];
 
     public function getError(): string
     {
@@ -30,12 +30,12 @@ class ErrorResponseDto implements ApiResponseInterface, ErrorResponseInterface
         return $this;
     }
 
-    public function getData(): array
+    public function getData(): ?array
     {
         return $this->data;
     }
 
-    public function setData(array $data): ErrorResponseDto
+    public function setData(?array $data): ErrorResponseDto
     {
         $this->data = $data;
         return $this;

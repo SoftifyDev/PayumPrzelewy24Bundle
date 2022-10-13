@@ -4,15 +4,15 @@ namespace Softify\PayumPrzelewy24Bundle\Dto\Marketplace;
 
 class CrcDataObjectDto
 {
-    protected int $id;
+    protected string $id;
     protected string $crc;
 
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }
 
-    public function setId(int $id): CrcDataObjectDto
+    public function setId(string $id): CrcDataObjectDto
     {
         $this->id = $id;
         return $this;

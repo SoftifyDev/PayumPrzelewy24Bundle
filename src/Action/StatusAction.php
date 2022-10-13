@@ -42,23 +42,25 @@ final class StatusAction implements ActionInterface, GatewayAwareInterface
         $this->gateway->execute($httpRequest = new GetHttpRequest());
 
         if (isset($httpRequest->query['status'])) {
-            $status = null;
-            if (ApiInterface::CANCELLED_STATUS === $httpRequest->query['status']) {
-                $details['state'] = ApiInterface::CANCELLED_STATUS;
-                $status = GetHumanStatus::STATUS_CANCELED;
-                $request->markCanceled();
-            } elseif (ApiInterface::PENDING_STATUS === $httpRequest->query['status']) {
-                $details['state'] = ApiInterface::PENDING_STATUS;
-                $status = GetHumanStatus::STATUS_PENDING;
-                $request->markPending();
-            }
-            if ($status) {
-                $event = new PaymentStatusEvent($payment->getStatus(), $payment);
-                $payment->setDetails($details);
-                $payment->setStatus($status);
-                $request->setModel($payment);
-                $this->entityManager->persist($payment);
-                $this->eventDispatcher->dispatch($event);
+            if ($payment->getStatus() === GetHumanStatus::STATUS_NEW) {
+                $status = null;
+                if (ApiInterface::CANCELLED_STATUS === $httpRequest->query['status']) {
+                    $details['state'] = ApiInterface::CANCELLED_STATUS;
+                    $status = GetHumanStatus::STATUS_CANCELED;
+                    $request->markCanceled();
+                } elseif (ApiInterface::PENDING_STATUS === $httpRequest->query['status']) {
+                    $details['state'] = ApiInterface::PENDING_STATUS;
+                    $status = GetHumanStatus::STATUS_PENDING;
+                    $request->markPending();
+                }
+                if ($status) {
+                    $event = new PaymentStatusEvent($payment->getStatus(), $payment);
+                    $payment->setDetails($details);
+                    $payment->setStatus($status);
+                    $request->setModel($payment);
+                    $this->entityManager->persist($payment);
+                    $this->eventDispatcher->dispatch($event);
+                }
             }
             return;
         }

@@ -44,6 +44,20 @@ final class RefundAction implements ApiAwareInterface, ActionInterface, GatewayA
             /** @var ErrorResponseInterface $response */
             $response = $this->paymentService->refundTransaction($request);
             if ($response instanceof RefundResponseDto) {
+                $details = ArrayObject::ensureArrayObject($payment->getDetails());
+                $refunds = [];
+                foreach ($response->getData() as $refundData) {
+                    $refunds[] = [
+                        'orderId' => $refundData->getOrderId(),
+                        'sessionId' => $refundData->getSessionId(),
+                        'amount' => $refundData->getAmount(),
+                        'description' => $refundData->getDescription(),
+                        'status' => $refundData->isStatus(),
+                        'message' => $refundData->getMessage()
+                    ];
+                }
+                $details['refunds'] = array_merge($details['refunds'] ?? [], [$details['refundRequestId'] => $refunds]);
+                $payment->setDetails($details);
                 $request->setModel($payment);
                 return;
             }

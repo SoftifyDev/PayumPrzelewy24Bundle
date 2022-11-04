@@ -43,8 +43,8 @@ final class RefundAction implements ApiAwareInterface, ActionInterface, GatewayA
         if ($details['refundsUuid'] === null) {
             /** @var ErrorResponseInterface $response */
             $response = $this->paymentService->refundTransaction($request);
+            $details = ArrayObject::ensureArrayObject($payment->getDetails());
             if ($response instanceof RefundResponseDto) {
-                $details = ArrayObject::ensureArrayObject($payment->getDetails());
                 $refunds = [];
                 foreach ($response->getData() as $refundData) {
                     $refunds[] = [
@@ -61,6 +61,9 @@ final class RefundAction implements ApiAwareInterface, ActionInterface, GatewayA
                 $request->setModel($payment);
                 return;
             }
+            unset($details['refundsUuid'],$details['refundRequestId']);
+            $payment->setDetails($details);
+            $request->setModel($payment);
             throw PaymentException::newInstanceFromErrorResponse($response);
         }
     }

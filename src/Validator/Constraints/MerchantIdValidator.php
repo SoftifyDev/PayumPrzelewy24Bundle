@@ -8,6 +8,7 @@ use Payum\Core\PayumBuilder;
 use Softify\PayumPrzelewy24Bundle\Dto\ErrorResponseDto;
 use Softify\PayumPrzelewy24Bundle\Dto\Marketplace\AffiliatesResponseDto;
 use Softify\PayumPrzelewy24Bundle\Request\VerifyMerchantIdRequest;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
@@ -17,9 +18,13 @@ class MerchantIdValidator extends ConstraintValidator
 {
     private ManagerRegistry $registry;
     private PayumBuilder $payumBuilder;
+    private ?ExpressionLanguage $expressionLanguage = null;
 
-    public function __construct(ManagerRegistry $registry, PayumBuilder $payumBuilder)
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        PayumBuilder $payumBuilder,
+        ExpressionLanguage $expressionLanguage = null
+    ) {
         $this->registry = $registry;
         $this->payumBuilder = $payumBuilder;
     }
@@ -37,6 +42,11 @@ class MerchantIdValidator extends ConstraintValidator
         }
 
         $class = $em->getClassMetadata(\get_class($value));
+        $variables = ['this' => $value];
+
+        if ($constraint->expression && !$this->getExpressionLanguage()->evaluate($constraint->expression, $variables)) {
+            return;
+        }
 
         $merchantId = $this->getFieldValue($constraint->merchantIdField, $class, $value);
         if (empty($merchantId)) {
@@ -74,7 +84,7 @@ class MerchantIdValidator extends ConstraintValidator
                     ->addViolation();
             }
             if ($regon && $response->getData()[0]->getRegon() !== $regon) {
-                $this->context->buildViolation($constraint->messageDifferentNip)
+                $this->context->buildViolation($constraint->messageDifferentRegon)
                     ->setTranslationDomain('validators')
                     ->setCode('bb2d7028-a6f3-413e-acce-c2d585bcd84d')
                     ->atPath($constraint->regonField)
@@ -89,5 +99,14 @@ class MerchantIdValidator extends ConstraintValidator
             throw new ConstraintDefinitionException(sprintf('The field "%s" is not mapped by Doctrine, so it cannot be validated for uniqueness.', $fieldName));
         }
         return $class->reflFields[$fieldName]->getValue($entity);
+    }
+
+    protected function getExpressionLanguage(): ExpressionLanguage
+    {
+        if (null === $this->expressionLanguage) {
+            $this->expressionLanguage = new ExpressionLanguage();
+        }
+
+        return $this->expressionLanguage;
     }
 }

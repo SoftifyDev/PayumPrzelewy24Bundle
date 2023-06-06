@@ -18,6 +18,7 @@ class MerchantId extends Constraint
     public string $merchantIdField;
     public string $nipField;
     public ?string $regonField;
+    public ?string $expression;
 
     public function __construct(
         $options = null,
@@ -27,6 +28,7 @@ class MerchantId extends Constraint
         $this->merchantIdField = $options['merchantIdField'] ?? null;
         $this->nipField = $options['nipField'] ?? null;
         $this->regonField = $options['regonField'] ?? null;
+        $this->expression = $options['expression'] ?? null;
         parent::__construct($options, $groups, $payload);
     }
 

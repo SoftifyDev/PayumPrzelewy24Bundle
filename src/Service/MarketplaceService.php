@@ -22,9 +22,9 @@ use GuzzleHttp\Client;
 
 class MarketplaceService
 {
-    private ClientInterface $httpClient;
-    private SerializerInterface $serializer;
-    private ApiInterface $api;
+    protected ClientInterface $httpClient;
+    protected SerializerInterface $serializer;
+    protected ApiInterface $api;
 
     public function __construct(SerializerInterface $serializer)
     {

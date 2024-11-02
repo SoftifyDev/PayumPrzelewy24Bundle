@@ -34,10 +34,10 @@ use Symfony\Component\Uid\Uuid;
 
 class PaymentService
 {
-    private ClientInterface $httpClient;
-    private SerializerInterface $serializer;
-    private ApiInterface $api;
-    private MarketplaceService $marketplaceService;
+    protected ClientInterface $httpClient;
+    protected SerializerInterface $serializer;
+    protected ApiInterface $api;
+    protected MarketplaceService $marketplaceService;
 
     public function __construct(SerializerInterface $serializer, MarketplaceService $marketplaceService)
     {
